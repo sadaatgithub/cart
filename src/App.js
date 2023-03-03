@@ -1,56 +1,34 @@
 import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
 
+import './App.css';
+import {Routes, Route, useNavigate} from "react-router-dom"
+import Home from './pages/Home';
+import Cart from './pages/Cart';
+import { useSelector } from 'react-redux';
+import {BiCart} from "react-icons/bi"
 function App() {
+  const cart = useSelector((state) => state.cart)
+  const navigate = useNavigate()
+  
+  const getTotalQuantity = () =>{
+      let total = 0
+      cart.cart.forEach(item => {
+          total += item.quantity
+      })
+      return total
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
+    <div className="">
+      <header className="bg-cyan-700 flex justify-around items-center text-white p-2">
+    <h2 onClick={() => navigate("/")} className="cursor-pointer font-bold text-xl">My Shopping cart</h2> <button className="cursor-pointer p-3 flex relative" onClick={() => navigate("/cart")}>
+      <BiCart className="text-2xl"/> 
+      <span className="absolute top-0 right-0 text-sm bg-blue-900/50 text-white  w-5 h-5 rounded-full flex justify-center items-center">{getTotalQuantity() || 0}</span></button>
+    </header> 
+      <Routes>
+        <Route exact path="/" element={<Home/>}></Route>
+        <Route  path="/cart" element={<Cart/>}></Route>
+      </Routes>
     </div>
   );
 }
